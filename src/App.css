@@ -1,0 +1,9 @@
+html,
+body {
+  height: 100dvh;
+  width: 100dvw;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  background-color: black;
+}
