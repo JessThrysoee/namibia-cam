@@ -103,4 +103,4 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
   );
 }
 
-export { type VideoPlacement, PictureInPicture };
+export { PictureInPicture, type VideoPlacement };
