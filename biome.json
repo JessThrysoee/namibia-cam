@@ -21,11 +21,6 @@
       "lineWidth": 120
     }
   },
-  "css": {
-    "parser": {
-      "cssModules": true
-    }
-  },
   "linter": {
     "enabled": true,
     "rules": {
