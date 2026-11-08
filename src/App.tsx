@@ -12,10 +12,12 @@ const initialStreams = [
 const pipWidth = Math.round(Math.min(300, window.innerWidth / 3, ((window.innerHeight / 4) * 16) / 9));
 const pipHeight = (pipWidth * 9) / 16;
 
+const thumbnailSlots = initialStreams.slice(1).map((_, i) => i + 1);
+
 function App() {
   const [streams, setStreams] = useState(initialStreams);
   const [pointerEvents, setPointerEvents] = useState<'auto' | 'none'>('auto');
-  const [frontSlot, setFrontSlot] = useState(2);
+  const [frontSlot, setFrontSlot] = useState(thumbnailSlots.length);
 
   const swapWithMain = (index: number) => {
     setStreams((current) => {
@@ -31,35 +33,23 @@ function App() {
         <PictureMain src={streams[0].url} />
       </div>
 
-      <PictureInPicture
-        x={12}
-        y={100}
-        width={pipWidth}
-        url={streams[1].url}
-        label={streams[1].name}
-        onTop={frontSlot === 1}
-        onClick={() => swapWithMain(1)}
-        onRndStart={() => {
-          setPointerEvents('none');
-          setFrontSlot(1);
-        }}
-        onRndStop={() => setPointerEvents('auto')}
-      />
-
-      <PictureInPicture
-        x={12}
-        y={100 + pipHeight + 20}
-        width={pipWidth}
-        url={streams[2].url}
-        label={streams[2].name}
-        onTop={frontSlot === 2}
-        onClick={() => swapWithMain(2)}
-        onRndStart={() => {
-          setPointerEvents('none');
-          setFrontSlot(2);
-        }}
-        onRndStop={() => setPointerEvents('auto')}
-      />
+      {thumbnailSlots.map((slot) => (
+        <PictureInPicture
+          key={slot}
+          x={12}
+          y={100 + (slot - 1) * (pipHeight + 20)}
+          width={pipWidth}
+          url={streams[slot].url}
+          label={streams[slot].name}
+          onTop={frontSlot === slot}
+          onClick={() => swapWithMain(slot)}
+          onRndStart={() => {
+            setPointerEvents('none');
+            setFrontSlot(slot);
+          }}
+          onRndStop={() => setPointerEvents('auto')}
+        />
+      ))}
     </>
   );
 }
