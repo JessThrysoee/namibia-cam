@@ -106,6 +106,7 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
       tabIndex={0}
       aria-label="Show in main view"
       style={{ backgroundColor: 'grey', pointerEvents: 'auto' }}
+      resizeHandleStyles={{ bottomRight: { right: 0, bottom: 0 } }}
       enableResizing={{
         top: false,
         right: false,
