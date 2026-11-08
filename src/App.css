@@ -8,3 +8,39 @@ body {
   background-color: black;
   user-select: none;
 }
+
+.resize-handle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 24px;
+  height: 24px;
+  cursor: se-resize;
+  touch-action: none;
+}
+
+.resize-handle::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid rgb(255 255 255 / 80%);
+  border-bottom: 2px solid rgb(255 255 255 / 80%);
+  opacity: 0;
+  transition: opacity 150ms;
+}
+
+@media (hover: hover) {
+  .pip:hover .resize-handle::after {
+    opacity: 1;
+  }
+}
+
+@media (pointer: coarse) {
+  .resize-handle {
+    width: 32px;
+    height: 32px;
+  }
+}

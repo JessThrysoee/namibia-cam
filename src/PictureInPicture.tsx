@@ -26,16 +26,6 @@ const styleVideo: React.CSSProperties = {
   pointerEvents: 'none',
 };
 
-const styleResizeHandle: React.CSSProperties = {
-  position: 'absolute',
-  right: 0,
-  bottom: 0,
-  width: 20,
-  height: 20,
-  cursor: 'se-resize',
-  touchAction: 'none',
-};
-
 type Props = {
   x: number;
   y: number;
@@ -117,6 +107,7 @@ function PictureInPicture({ x, y, width, url, label, onClick, onRndStart, onRndS
 
   return (
     <Rnd
+      className="pip"
       size={placement}
       position={placement}
       bounds="body"
@@ -139,7 +130,6 @@ function PictureInPicture({ x, y, width, url, label, onClick, onRndStart, onRndS
       </div>
       <div
         className="resize-handle"
-        style={styleResizeHandle}
         onPointerDown={handleResizeStart}
         onPointerMove={handleResize}
         onLostPointerCapture={handleResizeStop}
