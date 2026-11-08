@@ -58,6 +58,13 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
   const rndStart = () => {
     isActive.current = true;
     onRndStart();
@@ -94,6 +101,10 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
         rndStop();
       }}
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
+      aria-label="Show in main view"
       style={{ backgroundColor: 'grey', pointerEvents: 'auto' }}
       enableResizing={{
         top: false,
@@ -106,7 +117,9 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
         topLeft: false,
       }}
     >
-      <ReactPlayer playing={true} muted={true} style={styleVideo} src={url} />
+      <div inert>
+        <ReactPlayer playing={true} muted={true} style={styleVideo} src={url} />
+      </div>
     </Rnd>
   );
 }
