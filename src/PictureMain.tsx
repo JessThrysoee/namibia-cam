@@ -3,8 +3,10 @@ import ReactPlayer from 'react-player';
 
 const style: React.CSSProperties = {
   position: 'absolute',
-  inset: 0,
-  margin: 'auto',
+  top: 0,
+  left: 0,
+  right: 0,
+  margin: '0 auto',
   width: 'min(100dvw, calc(100dvh * 16 / 9))',
   height: 'min(100dvh, calc(100dvw * 9 / 16))',
 };
