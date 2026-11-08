@@ -69,7 +69,7 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
         setPlacement((s) => ({ ...s, ...d }));
         rndStop();
       }}
-      onResize={rndStart}
+      onResizeStart={rndStart}
       onResizeStop={(_e, _direction, ref, _delta, position) => {
         setPlacement((s) => ({
           ...s,
