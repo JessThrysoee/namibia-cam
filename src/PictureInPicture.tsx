@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { Rnd } from 'react-rnd';
 
@@ -23,6 +23,7 @@ const styleVideo: React.CSSProperties = {
   minWidth: 0,
   minHeight: 0,
   aspectRatio: '16/9',
+  pointerEvents: 'none',
 };
 
 type Props = {
@@ -41,7 +42,7 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
   const minWidth = Math.min(width, 120);
   const minHeight = (minWidth * 9) / 16;
 
-  const [placemant, setPlacement] = useState<VideoPlacement>(() =>
+  const [placement, setPlacement] = useState<VideoPlacement>(() =>
     fitToViewport({ x, y, width, height: (width * 9) / 16 }),
   );
 
@@ -51,11 +52,11 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     if (!isActive.current) {
       onClick();
     }
-  }, [onClick]);
+  };
 
   const rndStart = () => {
     isActive.current = true;
@@ -71,8 +72,8 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
 
   return (
     <Rnd
-      size={placemant}
-      position={placemant}
+      size={placement}
+      position={placement}
       bounds="body"
       minWidth={minWidth}
       minHeight={minHeight}
@@ -86,7 +87,8 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
       onResizeStop={(_e, _direction, ref, _delta, position) => {
         setPlacement((s) => ({
           ...s,
-          ...{ width: ref.offsetWidth, height: ref.offsetHeight },
+          width: ref.offsetWidth,
+          height: ref.offsetHeight,
           ...position,
         }));
         rndStop();
@@ -104,16 +106,9 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
         topLeft: false,
       }}
     >
-      <ReactPlayer
-        onMouseDown={(e) => e.stopPropagation()}
-        onClick={(e) => e.stopPropagation()}
-        playing={true}
-        muted={true}
-        style={{ ...styleVideo, ...{ pointerEvents: 'none' } }}
-        src={url}
-      />
+      <ReactPlayer playing={true} muted={true} style={styleVideo} src={url} />
     </Rnd>
   );
 }
 
-export { PictureInPicture, type VideoPlacement };
+export { PictureInPicture };
