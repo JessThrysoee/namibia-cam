@@ -29,7 +29,7 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
   const isActive = useRef(false);
 
   const minWidth = width;
-  const minHeight = width / 1.77777778; // 16:9 aspect ratio
+  const minHeight = (width * 9) / 16;
 
   const [placemant, setPlacement] = useState<VideoPlacement>({
     x: x,
