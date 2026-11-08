@@ -15,6 +15,7 @@ const pipHeight = (pipWidth * 9) / 16;
 function App() {
   const [streams, setStreams] = useState(initialStreams);
   const [pointerEvents, setPointerEvents] = useState<'auto' | 'none'>('auto');
+  const [frontSlot, setFrontSlot] = useState(2);
 
   const swapWithMain = (index: number) => {
     setStreams((current) => {
@@ -36,8 +37,12 @@ function App() {
         width={pipWidth}
         url={streams[1].url}
         label={streams[1].name}
+        onTop={frontSlot === 1}
         onClick={() => swapWithMain(1)}
-        onRndStart={() => setPointerEvents('none')}
+        onRndStart={() => {
+          setPointerEvents('none');
+          setFrontSlot(1);
+        }}
         onRndStop={() => setPointerEvents('auto')}
       />
 
@@ -47,8 +52,12 @@ function App() {
         width={pipWidth}
         url={streams[2].url}
         label={streams[2].name}
+        onTop={frontSlot === 2}
         onClick={() => swapWithMain(2)}
-        onRndStart={() => setPointerEvents('none')}
+        onRndStart={() => {
+          setPointerEvents('none');
+          setFrontSlot(2);
+        }}
         onRndStop={() => setPointerEvents('auto')}
       />
     </>

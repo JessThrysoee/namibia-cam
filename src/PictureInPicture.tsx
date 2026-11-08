@@ -32,12 +32,13 @@ type Props = {
   width: number;
   url: string;
   label: string;
+  onTop: boolean;
   onClick: () => void;
   onRndStart: () => void;
   onRndStop: () => void;
 };
 
-function PictureInPicture({ x, y, width, url, label, onClick, onRndStart, onRndStop }: Props) {
+function PictureInPicture({ x, y, width, url, label, onTop, onClick, onRndStart, onRndStop }: Props) {
   const isActive = useRef(false);
 
   const minWidth = Math.min(width, 120);
@@ -124,7 +125,7 @@ function PictureInPicture({ x, y, width, url, label, onClick, onRndStart, onRndS
       role="button"
       tabIndex={0}
       aria-label={`${label}: show in main view`}
-      style={{ backgroundColor: 'grey', pointerEvents: 'auto' }}
+      style={{ backgroundColor: 'grey', pointerEvents: 'auto', zIndex: onTop ? 1 : 0 }}
       enableResizing={false}
     >
       <div inert>
