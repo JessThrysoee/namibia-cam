@@ -71,7 +71,7 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      onClick();
+      if (!e.repeat) onClick();
     }
   };
 
