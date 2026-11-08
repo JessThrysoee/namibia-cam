@@ -54,7 +54,7 @@ function PictureInPicture({ x, y, width, url, label, onClick, onRndStart, onRndS
   }, []);
 
   const handleClick = (e: React.MouseEvent) => {
-    if (!isActive.current && !(e.target as Element).closest('.resize-handle')) {
+    if (e.detail <= 1 && !isActive.current && !(e.target as Element).closest('.resize-handle')) {
       onClick();
     }
   };
