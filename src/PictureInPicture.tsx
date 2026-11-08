@@ -66,14 +66,14 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
       lockAspectRatio={true}
       onDrag={rndStart}
       onDragStop={(_e, d) => {
-        setPlacement((s) => ({ ...s, ...d }));
+        setPlacement((s) => ({ ...s, x: d.x, y: d.y }));
         rndStop();
       }}
       onResizeStart={rndStart}
       onResizeStop={(_e, _direction, ref, _delta, position) => {
         setPlacement((s) => ({
           ...s,
-          ...{ width: parseInt(ref.style.width, 10), height: parseInt(ref.style.height, 10) },
+          ...{ width: ref.offsetWidth, height: ref.offsetHeight },
           ...position,
         }));
         rndStop();
