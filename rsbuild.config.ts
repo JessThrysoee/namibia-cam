@@ -5,11 +5,7 @@ import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 export default defineConfig({
   plugins: [pluginTypeCheck(), pluginReact()],
   html: {
-    title: 'NamibiaCam',
-    meta: {
-      description:
-        "Watch NamibiaCam's live wildlife webcams from Namibian waterholes side by side. Drag and resize the extra streams, and click one to make it the main view.",
-    },
+    template: './src/index.html',
   },
   output: {
     assetPrefix: '/namibia-cam/',
