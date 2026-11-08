@@ -89,6 +89,7 @@ function PictureInPicture({ x, y, width, url, label, onClick, onRndStart, onRndS
     }, 0);
 
   const handleResizeStart = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0) return;
     e.currentTarget.setPointerCapture(e.pointerId);
     resizeStart.current = { x: e.clientX, y: e.clientY, width: placement.width };
     rndStart();
@@ -96,6 +97,10 @@ function PictureInPicture({ x, y, width, url, label, onClick, onRndStart, onRndS
 
   const handleResize = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!resizeStart.current) return;
+    if ((e.buttons & 1) === 0) {
+      handleResizeStop();
+      return;
+    }
     const dx = e.clientX - resizeStart.current.x;
     const dy = e.clientY - resizeStart.current.y;
     const dw = ((dx * 16 + dy * 9) / (16 * 16 + 9 * 9)) * 16;
@@ -137,8 +142,7 @@ function PictureInPicture({ x, y, width, url, label, onClick, onRndStart, onRndS
         style={styleResizeHandle}
         onPointerDown={handleResizeStart}
         onPointerMove={handleResize}
-        onPointerUp={handleResizeStop}
-        onPointerCancel={handleResizeStop}
+        onLostPointerCapture={handleResizeStop}
       />
     </Rnd>
   );
