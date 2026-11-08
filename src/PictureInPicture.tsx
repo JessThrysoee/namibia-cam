@@ -112,7 +112,9 @@ function PictureInPicture({ x, y, width, url, label, onClick, onRndStart, onRndS
       position={placement}
       bounds="body"
       onDrag={rndStart}
-      onDragStop={(_e, d) => {
+      onDragStop={(e, d) => {
+        // react-draggable cancels touchstart, so the browser never sends a click for a tap
+        if (e.type === 'touchend' && !isActive.current) onClick();
         setPlacement((s) => ({ ...s, x: d.x, y: d.y }));
         rndStop();
       }}
