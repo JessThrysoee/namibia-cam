@@ -14,7 +14,7 @@ type Props = {
 };
 
 const PictureMain = React.memo(function PictureMain({ src }: Props) {
-  return <ReactPlayer controls playing={true} style={style} src={src} />;
+  return <ReactPlayer controls autoPlay style={style} src={src} />;
 });
 
 export { PictureMain };
