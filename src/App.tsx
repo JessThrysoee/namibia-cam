@@ -26,8 +26,6 @@ function App() {
 
   return (
     <>
-      <title>NamibiaCam</title>
-
       <div style={{ pointerEvents: pointerEvents }}>
         <PictureMain src={urls[0]} />
       </div>
