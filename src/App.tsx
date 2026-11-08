@@ -9,12 +9,12 @@ const initialStreams = [
   { name: 'Kalahari Desert', url: 'https://www.youtube.com/watch?v=ME0dPuBtzug' },
 ];
 
+const pipWidth = Math.round(Math.min(300, window.innerWidth / 3, ((window.innerHeight / 4) * 16) / 9));
+const pipHeight = (pipWidth * 9) / 16;
+
 function App() {
   const [streams, setStreams] = useState(initialStreams);
   const [pointerEvents, setPointerEvents] = useState<'auto' | 'none'>('auto');
-
-  const pipWidth = Math.round(Math.min(300, window.innerWidth / 3, ((window.innerHeight / 4) * 16) / 9));
-  const pipHeight = (pipWidth * 9) / 16;
 
   const swapWithMain = (index: number) => {
     setStreams((current) => {
@@ -26,7 +26,7 @@ function App() {
 
   return (
     <>
-      <div style={{ pointerEvents: pointerEvents }}>
+      <div style={{ pointerEvents }}>
         <PictureMain src={streams[0].url} />
       </div>
 
