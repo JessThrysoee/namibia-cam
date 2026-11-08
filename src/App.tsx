@@ -13,6 +13,9 @@ function App() {
   const [urls, setUrls] = useState(initialUrls);
   const [pointerEvents, setPointerEvents] = useState<'auto' | 'none'>('auto');
 
+  const pipWidth = Math.round(Math.min(300, window.innerWidth / 3, ((window.innerHeight / 4) * 16) / 9));
+  const pipHeight = (pipWidth * 9) / 16;
+
   const swapWithMain = (index: number) => {
     setUrls((current) => {
       const next = [...current];
@@ -32,7 +35,7 @@ function App() {
       <PictureInPicture
         x={12}
         y={100}
-        width={300}
+        width={pipWidth}
         url={urls[1]}
         onClick={() => swapWithMain(1)}
         onRndStart={() => setPointerEvents('none')}
@@ -41,8 +44,8 @@ function App() {
 
       <PictureInPicture
         x={12}
-        y={290}
-        width={300}
+        y={100 + pipHeight + 20}
+        width={pipWidth}
         url={urls[2]}
         onClick={() => swapWithMain(2)}
         onRndStart={() => setPointerEvents('none')}

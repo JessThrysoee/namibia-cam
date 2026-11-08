@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { Rnd } from 'react-rnd';
 
@@ -9,9 +9,19 @@ type VideoPlacement = {
   height: number;
 };
 
+function fitToViewport(p: VideoPlacement): VideoPlacement {
+  const width = Math.min(p.width, window.innerWidth, (window.innerHeight * 16) / 9);
+  const height = width === p.width ? p.height : (width * 9) / 16;
+  const x = Math.max(0, Math.min(p.x, window.innerWidth - width));
+  const y = Math.max(0, Math.min(p.y, window.innerHeight - height));
+  return x === p.x && y === p.y && width === p.width ? p : { x, y, width, height };
+}
+
 const styleVideo: React.CSSProperties = {
   width: '100%',
   height: 'auto',
+  minWidth: 0,
+  minHeight: 0,
   aspectRatio: '16/9',
 };
 
@@ -28,15 +38,18 @@ type Props = {
 function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: Props) {
   const isActive = useRef(false);
 
-  const minWidth = width;
-  const minHeight = (width * 9) / 16;
+  const minWidth = Math.min(width, 120);
+  const minHeight = (minWidth * 9) / 16;
 
-  const [placemant, setPlacement] = useState<VideoPlacement>({
-    x: x,
-    y: y,
-    width: minWidth,
-    height: minHeight,
-  });
+  const [placemant, setPlacement] = useState<VideoPlacement>(() =>
+    fitToViewport({ x, y, width, height: (width * 9) / 16 }),
+  );
+
+  useEffect(() => {
+    const onResize = () => setPlacement(fitToViewport);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
   const handleClick = useCallback(() => {
     if (!isActive.current) {
