@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactPlayer from 'react-player';
 
 const style: React.CSSProperties = {
@@ -14,7 +14,18 @@ type Props = {
 };
 
 const PictureMain = React.memo(function PictureMain({ src }: Props) {
-  return <ReactPlayer controls autoPlay style={style} src={src} />;
+  // react-player sets volume to this prop (default 1) on every render, which would reset it on a swap
+  const [volume, setVolume] = useState(1);
+  return (
+    <ReactPlayer
+      controls
+      autoPlay
+      style={style}
+      src={src}
+      volume={volume}
+      onVolumeChange={(e) => setVolume(e.currentTarget.volume)}
+    />
+  );
 });
 
 export { PictureMain };
