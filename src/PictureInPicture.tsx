@@ -26,6 +26,16 @@ const styleVideo: React.CSSProperties = {
   pointerEvents: 'none',
 };
 
+const styleResizeHandle: React.CSSProperties = {
+  position: 'absolute',
+  right: 0,
+  bottom: 0,
+  width: 20,
+  height: 20,
+  cursor: 'se-resize',
+  touchAction: 'none',
+};
+
 type Props = {
   x: number;
   y: number;
@@ -40,7 +50,7 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
   const isActive = useRef(false);
 
   const minWidth = Math.min(width, 120);
-  const minHeight = (minWidth * 9) / 16;
+  const resizeStart = useRef<{ x: number; y: number; width: number } | null>(null);
 
   const [placement, setPlacement] = useState<VideoPlacement>(() =>
     fitToViewport({ x, y, width, height: (width * 9) / 16 }),
@@ -77,50 +87,58 @@ function PictureInPicture({ x, y, width, url, onClick, onRndStart, onRndStop }: 
       onRndStop();
     }, 0);
 
+  const handleResizeStart = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    resizeStart.current = { x: e.clientX, y: e.clientY, width: placement.width };
+    rndStart();
+  };
+
+  const handleResize = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!resizeStart.current) return;
+    const dx = e.clientX - resizeStart.current.x;
+    const dy = e.clientY - resizeStart.current.y;
+    const dw = ((dx * 16 + dy * 9) / (16 * 16 + 9 * 9)) * 16;
+    const maxWidth = Math.min(window.innerWidth - placement.x, ((window.innerHeight - placement.y) * 16) / 9);
+    const newWidth = Math.min(Math.max(resizeStart.current.width + dw, minWidth), maxWidth);
+    setPlacement((s) => ({ ...s, width: newWidth, height: (newWidth * 9) / 16 }));
+  };
+
+  const handleResizeStop = () => {
+    if (!resizeStart.current) return;
+    resizeStart.current = null;
+    rndStop();
+  };
+
   return (
     <Rnd
       size={placement}
       position={placement}
       bounds="body"
-      minWidth={minWidth}
-      minHeight={minHeight}
-      lockAspectRatio={true}
       onDrag={rndStart}
       onDragStop={(_e, d) => {
         setPlacement((s) => ({ ...s, x: d.x, y: d.y }));
         rndStop();
       }}
-      onResizeStart={rndStart}
-      onResizeStop={(_e, _direction, ref, _delta, position) => {
-        setPlacement((s) => ({
-          ...s,
-          width: ref.offsetWidth,
-          height: ref.offsetHeight,
-          ...position,
-        }));
-        rndStop();
-      }}
+      cancel=".resize-handle"
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
       aria-label="Show in main view"
       style={{ backgroundColor: 'grey', pointerEvents: 'auto' }}
-      resizeHandleStyles={{ bottomRight: { right: 0, bottom: 0 } }}
-      enableResizing={{
-        top: false,
-        right: false,
-        bottom: false,
-        left: false,
-        topRight: false,
-        bottomRight: true,
-        bottomLeft: false,
-        topLeft: false,
-      }}
+      enableResizing={false}
     >
       <div inert>
         <ReactPlayer playing={true} muted={true} style={styleVideo} src={url} />
       </div>
+      <div
+        className="resize-handle"
+        style={styleResizeHandle}
+        onPointerDown={handleResizeStart}
+        onPointerMove={handleResize}
+        onPointerUp={handleResizeStop}
+        onPointerCancel={handleResizeStop}
+      />
     </Rnd>
   );
 }
